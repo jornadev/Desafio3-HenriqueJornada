@@ -1,6 +1,5 @@
 package com.compass.dto;
 
-import com.compass.dto.EventDTO;
 import lombok.Data;
 
 @Data

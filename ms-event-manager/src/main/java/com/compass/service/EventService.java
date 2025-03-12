@@ -2,6 +2,7 @@ package com.compass.service;
 
 import com.compass.client.ViaCepClient;
 import com.compass.dto.EventRequest;
+import com.compass.dto.EventDTO;
 import com.compass.model.Address;
 import com.compass.model.Event;
 import com.compass.repository.EventRepository;
@@ -18,37 +19,55 @@ public class EventService {
     private final EventRepository eventRepository;
     private final ViaCepClient viaCepClient;
 
-    public Event createEvent(EventRequest request) {
-        //System.out.println("requisitando CEP: " + request.getCep());
+    public EventDTO createEvent(EventRequest request) {
         Address address = viaCepClient.getAddress(request.getCep());
         Event event = new Event(UUID.randomUUID().toString(), request.getEventName(), request.getDateTime(), address);
-        return eventRepository.save(event);
+        Event savedEvent = eventRepository.save(event);
+        return mapToDTO(savedEvent);
     }
 
-    public Optional<Event> getEventById(String id) {
-        return eventRepository.findById(id);
+    public Optional<EventDTO> getEventById(String id) {
+        return eventRepository.findById(id).map(this::mapToDTO);
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        return events.stream().map(this::mapToDTO).toList();
     }
 
-    public List<Event> getAllEventsSorted() {
+    public List<EventDTO> getAllEventsSorted() {
         return eventRepository.findAll().stream()
                 .sorted((e1, e2) -> e1.getEventName().compareToIgnoreCase(e2.getEventName()))
+                .map(this::mapToDTO)
                 .toList();
     }
 
-    public Optional<Event> updateEvent(String id, EventRequest request) {
+    public Optional<EventDTO> updateEvent(String id, EventRequest request) {
         return eventRepository.findById(id).map(existingEvent -> {
             existingEvent.setEventName(request.getEventName());
             existingEvent.setDateTime(request.getDateTime());
-            existingEvent.setAddress(viaCepClient.getAddress(request.getCep()));
-            return eventRepository.save(existingEvent);
+            Address updatedAddress = viaCepClient.getAddress(request.getCep());
+            existingEvent.setAddress(updatedAddress);
+            Event updatedEvent = eventRepository.save(existingEvent);
+            return mapToDTO(updatedEvent);
         });
     }
 
     public void deleteEvent(String id) {
         eventRepository.deleteById(id);
     }
+
+    private EventDTO mapToDTO(Event event) {
+        EventDTO dto = new EventDTO();
+        dto.setEventId(event.getId());
+        dto.setEventName(event.getEventName());
+        dto.setEventDateTime(event.getDateTime());
+        dto.setLogradouro(event.getAddress().getLogradouro());
+        dto.setBairro(event.getAddress().getBairro());
+        dto.setCidade(event.getAddress().getLocalidade());
+        dto.setUf(event.getAddress().getUf());
+        return dto;
+    }
+
+
 }
