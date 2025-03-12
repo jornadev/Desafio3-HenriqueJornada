@@ -1,23 +1,19 @@
 package com.compass.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "tickets")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "tickets")
 public class Ticket {
     @Id
     private String ticketId;
-    private String customerName;
     private String cpf;
+    private String customerName;
     private String customerMail;
-    private String eventId;
-    private String eventName;
-    private String BRLamount;
-    private String USDamount;
+    private String eventId;  // Apenas o ID do evento
+    private String status;
+    private String BRLtotalAmount;  // Mantendo como String
+    private String USDtotalAmount;  // Mantendo como String
 }
