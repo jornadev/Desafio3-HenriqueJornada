@@ -12,8 +12,8 @@ public class Ticket {
     private String cpf;
     private String customerName;
     private String customerMail;
-    private String eventId;  // Apenas o ID do evento
+    private String eventId;
     private String status;
-    private String BRLtotalAmount;  // Mantendo como String
-    private String USDtotalAmount;  // Mantendo como String
+    private String BRLtotalAmount;
+    private String USDtotalAmount;
 }
