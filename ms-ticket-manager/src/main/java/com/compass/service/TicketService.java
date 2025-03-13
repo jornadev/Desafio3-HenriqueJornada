@@ -1,9 +1,13 @@
 package com.compass.service;
 
-import com.compass.config.FeignClientConfig; // Importando o FeignClient
+import com.compass.config.FeignClientConfig;
 import com.compass.dto.EventDTO;
 import com.compass.dto.TicketRequest;
 import com.compass.dto.TicketResponse;
+import com.compass.exception.EventNotFoundException;
+import com.compass.exception.FeignClientException;
+import com.compass.exception.InvalidTicketDataException;
+import com.compass.exception.TicketNotFoundException;
 import com.compass.model.Ticket;
 import com.compass.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +24,13 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
     @Autowired
-    private FeignClientConfig feignClientConfig; // Usando o FeignClient em vez de RestTemplate
+    private FeignClientConfig feignClientConfig;
 
     public TicketResponse createTicket(TicketRequest ticketRequest) {
         String eventId = ticketRequest.getEventId();
         EventDTO event = feignClientConfig.getEventById(eventId);
         if (event == null) {
-            throw new RuntimeException("Evento não encontrado");
+            throw new EventNotFoundException("Evento não encontrado");
         }
         Ticket ticket = new Ticket();
         ticket.setCustomerName(ticketRequest.getCustomerName());
@@ -53,7 +57,7 @@ public class TicketService {
     public TicketResponse getTicket(String id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         if (ticket.isEmpty()) {
-            throw new RuntimeException("Ingresso não encontrado");
+            throw new TicketNotFoundException("Ingresso não encontrado");
         }
 
         TicketResponse ticketResponse = new TicketResponse();
@@ -64,6 +68,9 @@ public class TicketService {
         ticketResponse.setCustomerMail(t.getCustomerMail());
 
         EventDTO event = feignClientConfig.getEventById(t.getEventId());
+        if (event == null) {
+            throw new EventNotFoundException("Evento não encontrado para o ticket.");
+        }
         ticketResponse.setEvent(event);
         ticketResponse.setBRLtotalAmount(t.getBRLtotalAmount());
         ticketResponse.setUSDtotalAmount(t.getUSDtotalAmount());
@@ -75,7 +82,7 @@ public class TicketService {
     public TicketResponse updateTicket(String id, TicketRequest ticketRequest) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         if (ticket.isEmpty()) {
-            throw new RuntimeException("Ingresso não encontrado");
+            throw new TicketNotFoundException("Ingresso não encontrado");
         }
         Ticket t = ticket.get();
         t.setCustomerName(ticketRequest.getCustomerName());
@@ -97,10 +104,10 @@ public class TicketService {
         try {
             event = feignClientConfig.getEventById(t.getEventId());
             if (event == null) {
-                throw new RuntimeException("Evento não encontrado para o ticket.");
+                throw new EventNotFoundException("Evento não encontrado para o ticket.");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao recuperar o evento associado: " + e.getMessage());
+            throw new FeignClientException("Erro ao recuperar o evento associado: " + e.getMessage());
         }
 
         ticketResponse.setEvent(event);
@@ -114,7 +121,7 @@ public class TicketService {
     public String cancelTicket(String id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
         if (ticket.isEmpty()) {
-            throw new RuntimeException("Ingresso não encontrado");
+            throw new TicketNotFoundException("Ingresso não encontrado");
         }
 
         Ticket t = ticket.get();
@@ -134,6 +141,9 @@ public class TicketService {
             response.setCustomerName(ticket.getCustomerName());
             response.setCustomerMail(ticket.getCustomerMail());
             EventDTO event = feignClientConfig.getEventById(ticket.getEventId());
+            if (event == null) {
+                throw new EventNotFoundException("Evento não encontrado para o ticket.");
+            }
             response.setEvent(event);
             response.setBRLtotalAmount(ticket.getBRLtotalAmount());
             response.setUSDtotalAmount(ticket.getUSDtotalAmount());
