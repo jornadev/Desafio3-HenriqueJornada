@@ -22,10 +22,10 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @Operation(summary = "Cria um novo ticket", description = "Cria um ticket baseado nos dados fornecidos no request.")
+    @Operation(summary = "Cria um novo ticket", description = "cria um ticket baseado nos dados fornecidos no request.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Ticket criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos")
+            @ApiResponse(responseCode = "201", description = "ticket criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "dados inválidos")
     })
     @PostMapping("/create-ticket")
     public ResponseEntity<TicketResponse> createTicket(@RequestBody TicketRequest ticketRequest) {
@@ -33,10 +33,10 @@ public class TicketController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtém um ticket pelo ID", description = "Retorna os detalhes de um ticket específico.")
+    @Operation(summary = "Obtém um ticket pelo ID", description = "retorna os detalhes de um ticket específico.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket encontrado"),
-            @ApiResponse(responseCode = "404", description = "Ticket não encontrado")
+            @ApiResponse(responseCode = "200", description = "ticket encontrado"),
+            @ApiResponse(responseCode = "404", description = "ticket não encontrado")
     })
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponse> getTicket(@PathVariable String id) {
@@ -44,10 +44,10 @@ public class TicketController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Atualiza um ticket", description = "Atualiza os dados de um ticket existente pelo ID.")
+    @Operation(summary = "Atualiza um ticket", description = "atualiza os dados de um ticket existente pelo ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket atualizado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Ticket não encontrado")
+            @ApiResponse(responseCode = "200", description = "ticket atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "ticket não encontrado")
     })
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<TicketResponse> updateTicket(@PathVariable String id, @RequestBody TicketRequest ticketRequest) {
@@ -55,10 +55,10 @@ public class TicketController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Cancela um ticket", description = "Cancela um ticket com base no ID fornecido.")
+    @Operation(summary = "Cancela um ticket", description = "cancela um ticket com base no ID fornecido.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ticket cancelado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Ticket não encontrado")
+            @ApiResponse(responseCode = "200", description = "ticket cancelado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "ticket não encontrado")
     })
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<String> cancelTicket(@PathVariable String id) {
@@ -66,10 +66,10 @@ public class TicketController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Lista tickets de um evento", description = "Retorna todos os tickets associados a um evento específico.")
+    @Operation(summary = "Lista tickets de um evento", description = "retorna todos os tickets associados a um evento específico.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de tickets retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+            @ApiResponse(responseCode = "200", description = "lista de tickets retornada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "evento não encontrado")
     })
     @GetMapping("/check-tickets-by-event/{eventId}")
     public ResponseEntity<List<TicketResponse>> checkTicketsByEvent(@PathVariable String eventId) {
