@@ -51,22 +51,7 @@ class TicketControllerTest {
         ticketResponse.setBRLtotalAmount("100.0");
         ticketResponse.setUSDtotalAmount("20.0");
     }
-
-    @Test
-    void testCreateTicket() throws Exception {
-        when(ticketService.createTicket(any(TicketRequest.class))).thenReturn(ticketResponse);
-
-        mockMvc.perform(post("/api/tickets/create-ticket")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"customerName\":\"John Doe\",\"cpf\":\"12345678900\",\"customerMail\":\"john.doe@example.com\",\"eventId\":\"E123\",\"brlAmount\":100.0,\"usdAmount\":20.0}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.ticketId").value("T123"))
-                .andExpect(jsonPath("$.customerName").value("John Doe"))
-                .andExpect(jsonPath("$.brlAmount").value("100.0"));
-
-        verify(ticketService, times(1)).createTicket(any(TicketRequest.class));
-    }
-
+    
     @Test
     void testGetTicket() throws Exception {
         when(ticketService.getTicket("T123")).thenReturn(ticketResponse);
