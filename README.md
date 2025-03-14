@@ -276,7 +276,7 @@ Também é possível visualizar os endpoints na interface gráfica fornecida pel
 
 Para facilitar o teste dos endpoints, disponibilizamos um arquivo JSON formatado para importação direta no Postman. Este arquivo contém todas as configurações de requisição necessárias para interagir com os microserviços.
 
-[**Download do arquivo JSON:** REST API basics- CRUD.postman_collection.json](https://github.com/jornadev/Desafio3-HenriqueJornada/blob/developer/assets/REST%20API%20basics-%20event-ticket.json)
+[**Download do arquivo JSON:** REST API basics- CRUD.event-ticket.json](https://github.com/jornadev/Desafio3-HenriqueJornada/blob/developer/assets/REST%20API%20basics-%20event-ticket.json)
 
 
 **Como importar no Postman:**
