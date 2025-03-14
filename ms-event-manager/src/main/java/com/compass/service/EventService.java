@@ -32,7 +32,7 @@ public class EventService {
         try {
             Address address = viaCepClient.getAddress(request.getCep());
             if (address == null || address.getLogradouro() == null) {
-                throw new InvalidCepException("CEP inválido ou não encontrado.");
+                throw new InvalidCepException("CEP inválido.");
             }
             Event event = new Event(UUID.randomUUID().toString(), request.getEventName(), request.getDateTime(), address);
             Event savedEvent = eventRepository.save(event);
@@ -45,7 +45,7 @@ public class EventService {
     public Optional<EventDTO> getEventById(String id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
-            throw new EventNotFoundException("Evento com ID " + id + " não encontrado.");
+            throw new EventNotFoundException("evento com ID " + id + " não encontrado.");
         }
         return event.map(this::mapToDTO);
     }
@@ -65,7 +65,7 @@ public class EventService {
     public Optional<EventDTO> updateEvent(String id, EventRequest request) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
-            throw new EventNotFoundException("Evento com ID " + id + " não encontrado.");
+            throw new EventNotFoundException("evento com ID " + id + " não encontrado.");
         }
         try {
             Event existingEvent = event.get();
@@ -73,30 +73,30 @@ public class EventService {
             existingEvent.setDateTime(request.getDateTime());
             Address updatedAddress = viaCepClient.getAddress(request.getCep());
             if (updatedAddress == null || updatedAddress.getLogradouro() == null) {
-                throw new InvalidCepException("CEP inválido ou não encontrado.");
+                throw new InvalidCepException("CEP inválido.");
             }
             existingEvent.setAddress(updatedAddress);
             Event updatedEvent = eventRepository.save(existingEvent);
             return Optional.of(mapToDTO(updatedEvent));
         } catch (FeignException ex) {
-            throw new InvalidCepException("Erro ao buscar o endereço pelo CEP.");
+            throw new InvalidCepException("erro ao buscar o endereço pelo CEP.");
         } catch (Exception ex) {
-            throw new EventUpdateException("Erro ao atualizar o evento com ID: " + id);
+            throw new EventUpdateException("erro ao atualizar o evento com ID: " + id);
         }
     }
 
     public void deleteEvent(String id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
-            throw new EventNotFoundException("Evento com ID " + id + " não encontrado.");
+            throw new EventNotFoundException("evento com ID " + id + " não encontrado.");
         }
         try {
             List<TicketResponse> tickets = feignClientClient.checkTicketsByEvent(id);
             if (tickets != null && !tickets.isEmpty()) {
-                throw new EventHasTicketsException("Você não pode apagar este evento porque há tickets vendidos!");
+                throw new EventHasTicketsException("você não pode apagar este evento porque há tickets vendidos!");
             }
         } catch (FeignException ex) {
-            logger.warn("Erro ao verificar ingressos para o evento ID: {}", id);
+            logger.warn("erro ao verificar ingressos para o evento ID: {}", id);
         }
 
         eventRepository.deleteById(id);
