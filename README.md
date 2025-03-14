@@ -326,7 +326,7 @@ Agora os microserviços estão rodando em:
 - ms-ticket-manager: http://localhost:8080
 - ms-event-manager: http://localhost:8081
 
-Usando o Postman ou algum software para fazer as requisições, faça a requisição para consumir a API externa POST - http://localhost:8081/api/sync-data
+Usando o Postman ou algum software para fazer as requisições.
 
 Feito isso, você estará pronto para requirir as demais funcionalidades da aplicação.
 
