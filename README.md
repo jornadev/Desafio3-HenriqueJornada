@@ -17,6 +17,13 @@ ms-ticket-manager: http://localhost:8080/swagger-ui/index.html
 
 - Henrique Jornada Martinuzzi | [@jornadev](https://github.com/jornadev)
 
+# 📽️ Demonstração do Projeto
+
+Acesse o link abaixo para ver uma demonstração da aplicação seguindo seu fluxo natural, com algumas exceções:
+
+[YouTube - Demonstração](https://youtu.be/PAH8NZUsHLU)
+
+
 # 🚀 Tecnologias Utilizadas
 - Java 17
 - Spring Boot
