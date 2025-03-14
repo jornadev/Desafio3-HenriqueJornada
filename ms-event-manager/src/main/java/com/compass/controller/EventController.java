@@ -16,21 +16,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
-@Tag(name = "Eventos", description = "API para gerenciamento de eventos")  // Nome e descrição da API no Swagger
+@Tag(name = "Eventos", description = "API para gerenciamento de eventos")
 public class EventController {
     private final EventService eventService;
 
-    @Operation(summary = "Listar todos os eventos", description = "Retorna uma lista com todos os eventos cadastrados.")
-    @ApiResponse(responseCode = "200", description = "Lista de eventos retornada com sucesso")
+    @Operation(summary = "Listar todos os eventos", description = "retorna uma lista com todos os eventos cadastrados.")
+    @ApiResponse(responseCode = "200", description = "lista de eventos retornada com sucesso")
     @GetMapping
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @Operation(summary = "Criar um evento", description = "Cria um novo evento com os dados fornecidos.")
+    @Operation(summary = "Criar um evento", description = "cria um novo evento com os dados fornecidos.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Evento criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+            @ApiResponse(responseCode = "200", description = "evento criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "dados fornecidos invalidos")
     })
     @PostMapping("/create-event")
     public ResponseEntity<EventDTO> createEvent(@RequestBody EventRequest request) {
@@ -38,10 +38,10 @@ public class EventController {
         return ResponseEntity.ok(createdEvent);
     }
 
-    @Operation(summary = "Buscar evento por ID", description = "Retorna os detalhes de um evento pelo ID informado.")
+    @Operation(summary = "Buscar evento por ID", description = "retorna os detalhes de um evento especifico.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Evento encontrado"),
-            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+            @ApiResponse(responseCode = "200", description = "evento encontrado"),
+            @ApiResponse(responseCode = "404", description = "evento não encontrado")
     })
     @GetMapping("/get-event/{id}")
     public ResponseEntity<EventDTO> getEventById(@PathVariable String id) {
@@ -50,17 +50,17 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Listar eventos ordenados", description = "Retorna uma lista de eventos ordenados por data ou outro critério.")
-    @ApiResponse(responseCode = "200", description = "Lista de eventos ordenada retornada com sucesso")
+    @Operation(summary = "Listar eventos ordenados", description = "retorna uma lista de eventos ordenados por ordem alfabética.")
+    @ApiResponse(responseCode = "200", description = "lista retornada com sucesso")
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<List<EventDTO>> getAllEventsSorted() {
         return ResponseEntity.ok(eventService.getAllEventsSorted());
     }
 
-    @Operation(summary = "Atualizar um evento", description = "Atualiza os dados de um evento existente pelo ID.")
+    @Operation(summary = "Atualizar um evento", description = "atualiza os dados de um evento existente pelo ID.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Evento atualizado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+            @ApiResponse(responseCode = "200", description = "evento atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "evento não encontrado")
     })
     @PutMapping("/update-event/{id}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable String id, @RequestBody EventRequest request) {
@@ -69,10 +69,10 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Excluir um evento", description = "Remove um evento pelo ID informado.")
+    @Operation(summary = "Excluir um evento", description = "remove um evento pelo ID informado.")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Evento deletado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Evento não encontrado")
+            @ApiResponse(responseCode = "204", description = "evento deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "evento não encontrado")
     })
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable String id) {
